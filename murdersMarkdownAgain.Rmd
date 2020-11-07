@@ -1,0 +1,57 @@
+---
+title: "Us_murders_Rmarkdown"
+author: "sahilkaushik93"
+date: "11/7/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# load the library tidyverse to perform some fuctions :
+```{r}
+library(tidyverse)
+```
+
+# load the data of US murders by FBI :
+
+```{r}
+load("rda/murders.rda")
+```
+
+# wrangling the data and segregating the output by region :
+
+```{r}
+murders <-read_csv("data/murders.csv")
+murders <- murders %>% mutate(region = factor(region),rate = total / population * 10^5)
+save(murders,file = "rda/murders.rda")
+```
+
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r, echo=FALSE}
+murders %>% mutate(abb= reorder(abb,rate)) %>% 
+  ggplot(aes(abb,rate)) +
+  geom_bar(width = 0.5,stat = "identity",color="Yellow")+
+  coord_flip()
+
+ggsave("figs/barplot.png")
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+# Key points :
+The knitr package is used to compile R markdown documents.
+The first time you click the "knit" button on the editor pane a pop-up window will prompt you to install packages, but after that is completed, the button will automatically knit your document.
+github_document gives a .md file, which will give the best presentation on GitHub
+
+# To change the type of output :
+output: html_document 
+output: pdf_document 
+output: word_document
+output: github_document
+
